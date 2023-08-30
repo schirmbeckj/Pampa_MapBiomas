@@ -1,30 +1,24 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var pol = 
-    /* color: #d63000 */
-    /* shown: false */
-    ee.Geometry.MultiPoint();
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // MAPBIOMAS PAMPA
-// COLLECTION 06 
+// COLLECTION 08
 // AUTHOR: Juliano Schirmbeck
 // DATE: junho 2021
 //
 //  Randon Forest to region 06
 
 
-var version = '033'
+var version = '07'
 var version_hand = '01'
-var col = '7'
+var col = 8
 
 var bioma = "PAMPA"
   
 
-var versionOut = version + 'b_freq'
-var versionIn = version + 'b_temp'
+var versionOut = version + '_freq'
+var versionIn = version + '_temp2'
 var versionIncidentes = version +  '_pre_incidentes'
 
-var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '/'
-var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '_filtros/'
+var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '/'
+var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
 var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
 var image_hand_class = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/class_col6_filtros/classes_hand01')
                                  //'projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/class_col6_filtros/classes_hand01
@@ -40,9 +34,10 @@ var vis = { 'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
 var exp = '100*((b( 0)+b( 1)+b( 2)+b( 3)+b( 4)+b( 5)+b( 6)+b( 7)+b( 8)+b( 9)'+
                '+b(10)+b(11)+b(12)+b(13)+b(14)+b(15)+b(16)+b(17)+b(18)+b(19)'+
                '+b(20)+b(21)+b(22)+b(23)+b(24)+b(25)+b(26)+b(27)+b(28)+b(29)'+
-               '+b(30)+b(31)+b(32)+b(33)+b(34)+b(35)+b(36))/37)';
+               '+b(30)+b(31)+b(32)+b(33)+b(34)+b(35)+b(36)+b(37))/38)';
 
-var regioes = [1,4,6,7,2,3,5]
+var regioes = [1,2,3,4,5,6,
+                7]
 
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var regiao = regioes[i_regiao];
@@ -57,14 +52,14 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   if (regiao == 7)  var aplicar = {freq1: 1, freq2: 1, freq3: 0, freq4 :0}
   
   var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
-  var image_incidence = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF85a21_v' +  versionIncidentes)
-  var image_in = ee.Image(dir_filtros + '0' + String(regiao) +'_RF85a21_v' + versionIn);
-  var image_gap = ee.Image(dir_filtros +  '0' + String(regiao) +'_RF85a21_v' + versionIn);
+  print(dir_filtros+ '0' + String(regiao) +'_RF_col' + col + '_v' +  versionIncidentes)
+  var image_incidence = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF_col' + col + '_v' +  versionIncidentes)
+  var image_in = ee.Image(dir_filtros + '0' + String(regiao) +'_RF_col'+col+'_v' + versionIn);
   print(image_incidence)
   
-  
-  Map.addLayer(image_in,vis1,'MapBio Temporal')
-  Map.addLayer(image_gap,vis1,'MapBio GAP')
+  var mode = image_in.reduce(ee.Reducer.mode());
+  Map.addLayer(image_in,vis1,'MapBio Temporal (input)')
+
   
     
   // get frequency
@@ -84,7 +79,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   // problemas associados a floresta em area umida
     if (aplicar.freq1){
       
-    //trabalha com areas com predominância de banhado > 51%  
+    //trabalha com areas com predominância de banhado > 70%  
     var vegMask51 = ee.Image(0)
                              .where((umiFreq.gt(1)
                              .and((umiFreq.add(grassFreq)
@@ -96,7 +91,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                             .where(vegMask51.eq(1).and(umiFreq.gt(70)), 11)
   
     vegMap51 = vegMap51.updateMask(vegMap51.neq(0))
-    //Map.addLayer(vegMap51,vis,'vegMap 1 - 51')
+    //Map.addLayer(vegMap51,vis,'vegMap 70 - 100')
     //Map.addLayer(vegMask51,vis,'vegMask carrosel 1 - 51')
     image_in = image_in.where(vegMap51, vegMap51)
     
@@ -107,10 +102,14 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                              .and(image_incidence.select('incidence').gt(1))),
                              1)
     var  vegMap20 = ee.Image(0)
-                            .where(vegMask20.eq(1),image_incidence.select('classification_mode'))
-  
+                            .where(vegMask20.eq(1),mode)
+                            
+    //Map.addLayer(mode,vis,'teste 1')
+    
     vegMap20 = vegMap20.updateMask(vegMap20.neq(0))
+    //Map.addLayer(image_in,vis1,'teste 1')
     image_in = image_in.where(vegMap20.and(image_in.eq(11)), vegMap20)
+    //Map.addLayer(image_in,vis1,'teste 2')
     
     //Map.addLayer(vegMap20,vis,'vegMap 1 - 20')
     //Map.addLayer(vegMask20,vis,'vegMask carrosel 20')
@@ -129,7 +128,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     
     image_in = image_in.where(vegMapx.and(image_in.eq(3)), vegMapx)
     
-    //Map.addLayer(vegMapx,vis,'vegMap 1 - x')
+    //Map.addLayer(vegMapx,vis,'vegMap 20 - 70')
     //Map.addLayer(vegMaskx,vis,'vegMask carrosel x')
     
     
@@ -172,7 +171,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                            1)
     /////Mapa base: 
     var vegMap = ee.Image(0)
-                          .where(vegMask.eq(1),image_incidence.select('classification_mode'))
+                          .where(vegMask.eq(1),mode)
                            
     vegMap = vegMap.updateMask(vegMap.neq(0))//.clip(BiomaPA)
     image_in = image_in.where(vegMap, vegMap)
@@ -183,7 +182,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                            1)
     /////Mapa base: 
     vegMap = ee.Image(0)
-                          .where(vegMask.eq(1),image_incidence.select('classification_mode'))
+                          .where(vegMask.eq(1),mode)
                            
     vegMap = vegMap.updateMask(vegMap.neq(0))//.clip(BiomaPA)
     image_in = image_in.where(vegMap.and(image_in.eq(29)), vegMap)
@@ -194,7 +193,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                            1)
     /////Mapa base: 
     vegMap = ee.Image(0)
-                          .where(vegMask.eq(1),image_incidence.select('classification_mode'))
+                          .where(vegMask.eq(1),mode)
                            
     vegMap = vegMap.updateMask(vegMap.neq(0))//.clip(BiomaPA)
     image_in = image_in.where(vegMap.and(image_in.eq(22)), vegMap)
@@ -221,8 +220,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var  vegMapAg = vegMaskAg
   
     vegMapAg = vegMapAg.updateMask(vegMapAg.neq(0))
-    Map.addLayer(vegMapAg,vis,'vegMap - Ag')
-    Map.addLayer(vegMaskAg,vis,'vegMask carrosel - Ag')
+    //Map.addLayer(vegMapAg,vis,'vegMap - Ag')
+    //Map.addLayer(vegMaskAg,vis,'vegMask carrosel - Ag')
     Map.addLayer(image_hand_class,{},'HAND Class')
     image_in = image_in.where(vegMapAg.and(image_in.eq(33)), moda_n_agua)
     image_in = image_in.where(vegMapAg.and(image_in.eq(11)), moda_n_umi)
@@ -231,6 +230,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   //image_hand_class
   
   var image_out = image_in
+  Map.addLayer(image_out,vis1,'Output')
+  
   
   image_out = image_out
     .set('collection', col)
@@ -243,8 +244,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   
   Export.image.toAsset({
       'image': image_out,
-      'description': + '0' + String(regiao) +'_RF85a21_v'+versionOut,
-      'assetId': dir_filtros + '0' + String(regiao) +'_RF85a21_v'+versionOut,
+      'description': '0' + String(regiao) + '_RF_col' + col + '_v' + versionOut,
+      'assetId': dir_filtros +  '0' + String(regiao) + '_RF_col' + col + '_v'  + versionOut,
       'pyramidingPolicy': {
           '.default': 'mode'
       },
