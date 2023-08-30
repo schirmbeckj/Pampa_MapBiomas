@@ -1,216 +1,4 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var controles = ee.FeatureCollection("users/evelezmartin/shp/Controles_regiao_cel_3km"),
-    anv = /* color: #ea9999 */ee.FeatureCollection([]),
-    arocho = /* color: #ff8c00 */ee.FeatureCollection([]),
-    agua = /* color: #0000ff */ee.FeatureCollection([]),
-    floresta = /* color: #006400 */ee.FeatureCollection(
-        [ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.705441031090174, -28.239795717062545],
-                  [-55.70651391469613, -28.239606680163444],
-                  [-55.707157644859706, -28.240287211432474],
-                  [-55.70501187764779, -28.240929931422492]]]),
-            {
-              "reference": 3,
-              "system:index": "0"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.70063451253549, -28.238169988783408],
-                  [-55.70179322682992, -28.23696012840425],
-                  [-55.70235112630502, -28.237262594785285],
-                  [-55.70072034322396, -28.238737106113156]]]),
-            {
-              "reference": 3,
-              "system:index": "1"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.709947142235194, -28.23733821124657],
-                  [-55.71011880361215, -28.238321220366107],
-                  [-55.70857385121957, -28.238926144553133]]]),
-            {
-              "reference": 3,
-              "system:index": "2"
-            })]),
-    aumi = /* color: #45c2a5 */ee.FeatureCollection(
-        [ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.53025896673751, -28.359494793113242],
-                  [-55.529743982606654, -28.361383018409217],
-                  [-55.52781279211593, -28.36194947944769],
-                  [-55.528714014344935, -28.359910205560453]]]),
-            {
-              "reference": 11,
-              "system:index": "0"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.52107508307052, -28.365272656642965],
-                  [-55.52013094549728, -28.367462875626188],
-                  [-55.51931555395675, -28.366065672185222],
-                  [-55.5206030142839, -28.364781739289903]]]),
-            {
-              "reference": 11,
-              "system:index": "1"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.515496088319544, -28.370483793145883],
-                  [-55.51232035284591, -28.369350959155287],
-                  [-55.51562483435226, -28.36791601873723],
-                  [-55.516483141237025, -28.369086629483768]]]),
-            {
-              "reference": 11,
-              "system:index": "2"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.506955217892425, -28.45814660038713],
-                  [-55.50840361076047, -28.456194071043097],
-                  [-55.50904734092404, -28.457127893924383],
-                  [-55.50755603271176, -28.458137167964924]]]),
-            {
-              "reference": 11,
-              "system:index": "3"
-            })]),
-    campo = /* color: #b8af4f */ee.FeatureCollection([]),
-    agric = /* color: #ffefc3 */ee.FeatureCollection(
-        [ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.46351553712399, -29.761074098598623],
-                  [-55.459395664077114, -29.75958389014367],
-                  [-55.46403052125485, -29.756603406750003],
-                  [-55.46626211915524, -29.757646586020915]]]),
-            {
-              "reference": 21,
-              "system:index": "0"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.47141196046383, -29.702343127172316],
-                  [-55.46729208741696, -29.706518036497748],
-                  [-55.46832205567868, -29.702044912722556]]]),
-            {
-              "reference": 21,
-              "system:index": "1"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.495101230483364, -29.73126571959459],
-                  [-55.495101230483364, -29.728433462703084],
-                  [-55.49922110353024, -29.729626001665622],
-                  [-55.497847812514614, -29.73305447222476]]]),
-            {
-              "reference": 21,
-              "system:index": "2"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.47995809393879, -29.753993355335393],
-                  [-55.48047307806965, -29.757011172802635],
-                  [-55.478327310857736, -29.757234711222416],
-                  [-55.47755483466145, -29.754477702531936]]]),
-            {
-              "reference": 21,
-              "system:index": "3"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.54872885604647, -29.761588723971137],
-                  [-55.55074587722567, -29.763302427494608],
-                  [-55.54812804122714, -29.765910180964916]]]),
-            {
-              "reference": 21,
-              "system:index": "4"
-            }),
-        ee.Feature(
-            ee.Geometry.Polygon(
-                [[[-55.51465407272128, -29.762147543557997],
-                  [-55.519460591275966, -29.762333816061055],
-                  [-55.519503506620204, -29.764606312714328],
-                  [-55.514997395475184, -29.766543482278042]]]),
-            {
-              "reference": 21,
-              "system:index": "5"
-            })]),
-    geom_limite = /* color: #0b4a8b */ee.Geometry.Polygon(
-        [[[-52.885708449539926, -27.41341405536019],
-          [-52.965359328446176, -27.557171832169132],
-          [-52.957119582352426, -27.705605102616218],
-          [-52.932400344071176, -27.89025613442972],
-          [-53.034023879227426, -28.021264565544552],
-          [-53.215298293289926, -27.899965912234578],
-          [-53.234524367508676, -27.683717776273465],
-          [-53.251003859696176, -27.591256277027615],
-          [-53.426785109696176, -27.484098106597997],
-          [-53.610806105789926, -27.55960678648443],
-          [-53.731655715164926, -27.771240733410945],
-          [-53.866238234696176, -27.84655135903658],
-          [-53.989834426102426, -27.69101403933739],
-          [-54.107937453446176, -27.749366583494425],
-          [-54.215054152664926, -27.66912378772526],
-          [-54.374355910477426, -27.654527849855317],
-          [-54.412808058914926, -27.742074223530338],
-          [-54.418301222977426, -27.887828553882628],
-          [-54.662747023758676, -27.834408016092944],
-          [-54.855007765946176, -27.924236544965034],
-          [-54.618801711258676, -28.16906402271587],
-          [-54.912685988602426, -28.224738794769603],
-          [-54.967617629227426, -28.047931963250626],
-          [-55.107693312821176, -27.977612755930778],
-          [-55.327419875321176, -27.887828553882628],
-          [-55.464748976883676, -27.999440871062045],
-          [-55.629543898758676, -28.064898683485087],
-          [-55.678982375321176, -28.13273877044411],
-          [-55.786099074539926, -28.17874867495374],
-          [-55.838284133133676, -28.285221931890774],
-          [-55.758633254227426, -28.343253439167768],
-          [-55.772366164383676, -28.427825907370217],
-          [-55.604824660477426, -28.534049766919782],
-          [-55.799831984696176, -28.589533318907183],
-          [-55.684475539383676, -28.775069402278554],
-          [-55.475735305008676, -28.90739360022109],
-          [-55.558132765946176, -29.022738826210755],
-          [-55.662502883133676, -29.10436385074485],
-          [-55.703701613602426, -29.1619425773206],
-          [-55.681728957352426, -29.296167375662097],
-          [-55.764126418289926, -29.391934384476905],
-          [-55.786099074539926, -29.559309785148635],
-          [-55.714687941727426, -29.731178511058637],
-          [-55.791592238602426, -29.83129959454933],
-          [-55.604824660477426, -29.931320453376234],
-          [-55.423550246414926, -30.055016637173914],
-          [-55.176357863602426, -29.993187812537652],
-          [-55.055508254227426, -29.73594845134057],
-          [-54.896206496414926, -29.487611313150943],
-          [-54.775356887039926, -29.363213731944],
-          [-54.522671340164926, -29.324906925856233],
-          [-54.500698683914926, -29.482829608932068],
-          [-54.385342238602426, -29.482829608932068],
-          [-54.302944777664926, -29.415862068780743],
-          [-54.077725051102426, -29.478047679080724],
-          [-54.083218215164926, -29.59275167517244],
-          [-53.742642043289926, -29.650054843938197],
-          [-53.550381301102426, -29.66437554316925],
-          [-53.594326613602426, -29.49717404460064],
-          [-53.352627394852426, -29.415862068780743],
-          [-52.990078566727426, -29.21948903383809],
-          [-53.039517043289926, -28.883347176650183],
-          [-53.132900832352426, -28.6377560984467],
-          [-53.110928176102426, -28.35292227741544],
-          [-53.017544387039926, -28.478536985915067],
-          [-52.792324660477426, -28.49784909221619],
-          [-52.506680129227426, -28.53646270331907],
-          [-52.237515090164926, -28.377090520789174],
-          [-52.034268019852426, -28.173906458433017],
-          [-52.199062941727426, -28.062475030263602],
-          [-52.226528762039926, -27.946075456550147],
-          [-52.248501418289926, -27.6837177762735],
-          [-52.462734816727426, -27.65939337902758],
-          [-52.687954543289926, -27.41585219024954]]]);
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
-// Coleção 6  
+// Coleção 6   
 // Script para fazer ajuste fino da classificação das regiões
 // Para rodar veja instruções no final do arquivo
  
@@ -218,19 +6,19 @@ var controles = ee.FeatureCollection("users/evelezmartin/shp/Controles_regiao_ce
 //customizada para incluir mosaico 2017 com duas versões de bandas RGB falsa cor
  
 //var classRegion01 = function (version_out, sufixName, versao_amostra, RFtrees) {
-var version_out = '031'//mudar a cada nova versao que for exportada
-var version = '2' //versão dos mosaicos
+var version_out = '07'//mudar a cada nova versao que for exportada
+var version = '2' //versão dos mosaicos 
 var version_samples = '03'
 var ano_base = 2000
 var RFtrees = 100//60, 100 
-var classe_diferenca = 3
+var classe_diferenca = 21
 
 var desvio = 0 // desvio para calculo de balanceamento de amostras	
-var nSamplesMin = 200;
+var nSamplesMin = 150;
 var nSamplesMax = 2000;
 
 var regiao = 4
-var collection_out = 7
+var collection_out = 8
 var versaocomplementares = '01' 
 
 var bioma = 'PAMPA'
@@ -241,24 +29,25 @@ var bioma = 'PAMPA'
 //*****************************************
 //definir com 1 para usar e como zero para não usar
 var importar_estaveis = 1    //definir com 1 para importar e como zero para gerar a partir de pontos estaveis
-var usar_complementares = 0
+var usar_complementares = 1
 
 var debug = 1   //variavel para uso de debug, habilita os prints e os addLayers
 var calcula_acuracia = 1
 var calcula_area = 1 
-var ano_calcula_area = '2017'
+var ano_calcula_area = '1990'
 var calcula_confusao = 1 //se calcula acuracia igual a zero esse é ignorado
-var exporta_colecao = 0//ativar a geometria do bioma antes de dar o Run
+var exporta_colecao = 1//ativar a geometria do bioma antes de dar o Run
 //*************************************
 //var dirasset =  'projects/nexgenmap/MapBiomas2/LANDSAT/mosaics';
 //var dirasset7 = 'projects/nexgenmap/MapBiomas2/LANDSAT/mosaics-landsat-7';
 
 var dirasset =  'projects/nexgenmap/MapBiomas2/LANDSAT/BRAZIL/mosaics-2-pampa';
+
 //pontos estaveis com propriedades
 var dirsamples = 'projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/SAMPLES/v' + version_samples + '/training_periodosFO_'
-//var dirsamples = 'projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/SAMPLES_FO/training_LabGeo_FO_SHP'
+//var dirsamples = 'projects/mapbiomas-workspace/AMOSTRAS/col' + collection_out + '/PAMPA/SAMPLES/v' + version_samples + '/training_periodos_'
 var dircomple = 'projects/mapbiomas-workspace/AMOSTRAS/col5/PAMPA/'
-var dirout = 'projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/class_col7/'
+var dirout = 'projects/mapbiomas-workspace/AMOSTRAS/col' + collection_out + '/PAMPA/class_col_' + collection_out + '/'
 
 var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
 var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
@@ -281,12 +70,13 @@ if (exporta_colecao == 1){
   var anos = [
     1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,
     1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,
-    2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021
+    2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,
+    2015,2016,2017,2018,2019,2020,2021,2022
     ];
 							
 }else
 {
-    var anos = [1990,2000,2010,2017,2020]
+    var anos = [1985,1990,2004, 2017]
     limite = limite.geometry()
 }
 
@@ -296,7 +86,7 @@ var bioma250mil_PA = biomes.mask(biomes.eq(6))
 
 var palettes = require('users/mapbiomas/modules:Palettes.js');
 //vis coll 05
-var vis = { 'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+var vis = {'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
 
 //nomes bandas
 {var bandNames = ee.List([
@@ -509,31 +299,46 @@ var n_amostas = ee.Feature(ee.Geometry.Point([0, 0]))
 for (var i_ano=0;i_ano<anos.length; i_ano++){
   var ano = anos[i_ano];
  if (ano <= 1994){ // ajustar para período 1
-    var percent_Flo =  -60.14	    + desvio + ano *  0.03597
-    var percent_Umi =   -7.63	    + desvio + ano *  0.00400
-    var percent_Cam = 1245.50	    + desvio + ano * -0.60527
-    var percent_Agr =-1069.87	    + desvio + ano *  0.56000
-    var percent_Anv =    4.00	    + desvio + ano * -0.00128
-    var percent_Afr =    0.00000	+ desvio + ano *  0.00000
-    var percent_Agu =  -11.87	    + desvio + ano *  0.00659
+    var percent_Flo =  -60.14	    + 22 + ano *  0.03597
+//    var percent_Umi =   -7.63	    + desvio + ano *  0.00400
+    var percent_Umi = 10
+//    var percent_Cam = 50
+    var percent_Cam = 1245.50	    + 3 + ano * -0.60527
+    var percent_Agr =-1069.87	    + 5 + ano *  0.56000
+    //var percent_Anv =    4.00	    + desvio + ano * -0.00128
+     var percent_Anv = 7
+ //   var percent_Afr =    0.00000	+ desvio + ano *  0.00000
+//    var percent_Agu =  -11.87	    + desvio + ano *  0.00659
+   var percent_Agu = 35
+   
  }
  if (ano > 1994 && ano <= 2004){// ajustar para período 2
-    var percent_Flo =  -60.14	    + desvio + ano *  0.03597
-    var percent_Umi =   -7.63	    + desvio + ano *  0.00400
-    var percent_Cam = 1245.50	    + desvio + ano * -0.60527
-    var percent_Agr =-1069.87	    + desvio + ano *  0.56000
-    var percent_Anv =    4.00	    + desvio + ano * -0.00128
-    var percent_Afr =    0.00000	+ desvio + ano *  0.00000
-    var percent_Agu =  -11.87	    + desvio + ano *  0.00659
+    var percent_Flo =  -60.14	    + 22 + ano *  0.03597
+    var percent_Umi = 10
+//    var percent_Umi =   -7.63	    + desvio + ano *  0.00400
+//    var percent_Cam = 50
+    var percent_Cam = 1245.50	    + 3 + ano * -0.60527
+//    var percent_Agr =-1069.87	    + 0 + ano *  0.56000
+    var percent_Agr =-1069.87	    + 5 + ano *  0.56000
+    var percent_Anv = 7
+   //var percent_Anv =    4.00	    + desvio + ano * -0.00128
+ //   var percent_Afr =    0.00000	+ desvio + ano *  0.00000
+ //   var percent_Agu =  -11.87	    + desvio + ano *  0.00659
+       var percent_Agu = 35
  }
  if (ano > 2004){ // ajustar para período 3
-    var percent_Flo =  -60.14	    + desvio + ano *  0.03597
-    var percent_Umi =   -7.63	    + desvio + ano *  0.00400
-    var percent_Cam = 1245.50	    + desvio + ano * -0.60527
-    var percent_Agr =-1069.87	    + desvio + ano *  0.56000
-    var percent_Anv =    4.00	    + desvio + ano * -0.00128
-    var percent_Afr =    0.00000	+ desvio + ano *  0.00000
-    var percent_Agu =  -11.87	    + desvio + ano *  0.00659
+    var percent_Flo =  -60.14	    + 22 + ano *  0.03597
+    var percent_Umi = 10
+//    var percent_Umi =   -7.63	    + desvio + ano *  0.00400
+    var percent_Cam = 35
+    //var percent_Cam = 1245.50	    + 15 + ano * -0.60527
+//    var percent_Agr =-1069.87	    + -6 + ano *  0.56000
+    var percent_Agr = 57
+    var percent_Anv = 7
+//    var percent_Anv =    4.00	    + desvio + ano * -0.00128
+//    var percent_Afr =    0.00000	+ desvio + ano *  0.00000
+//    var percent_Agu =  -11.87	    + desvio + ano *  0.00659
+       var percent_Agu = 35
  }
   var mosaicoTotal =   mosaicos.filterMetadata('year', 'equals', ano)
                       .filterBounds(limite)
@@ -575,7 +380,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
   //Map.addLayer(ndvi_a_3y, {}, 'ndvi_a_3y', true);
   mosaicoTotal = mosaicoTotal.addBands(ndvi_a_3y)
 
-  var ll = ee.Image.pixelLonLat().mask(bioma250mil_PA);
+  var ll = ee.Image.pixelLonLat().mask(limite_reg_raster);
   
   var long = ll.select('longitude').add(0).multiply(-1).multiply(1000).toInt16()
   var lati = ll.select('latitude').add(0).multiply(-1).multiply(1000).toInt16()
@@ -591,6 +396,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
   if (importar_estaveis == 1){
     var SS_amostras = ee.FeatureCollection(dirsamples + ano)															
         .filter(ee.Filter.lt('outlier', 20))
+    //var SS_amostras = ee.FeatureCollection(dirsamples + ano + '_v' + version_samples)
         //.filterMetadata('regiao','equals',regiao)
         //.filter(ee.Filter.eq('regiao', regiao))
         //.filterBounds(limite) 
@@ -600,7 +406,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
     var SS_Cam = SS_amostras.filterMetadata('reference', 'equals', 12)
     var SS_Agr = SS_amostras.filterMetadata('reference', 'equals', 21)
     var SS_Anv = SS_amostras.filterMetadata('reference', 'equals', 22)
-    var SS_Afr = SS_amostras.filterMetadata('reference', 'equals', 29)
+//    var SS_Afr = SS_amostras.filterMetadata('reference', 'equals', 29)
     var SS_Agu = SS_amostras.filterMetadata('reference', 'equals', 33)
 
     var n_samples_Flo = ee.Number(ee.Number(nSamplesMax).multiply(percent_Flo).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
@@ -608,7 +414,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
     var n_samples_Cam = ee.Number(ee.Number(nSamplesMax).multiply(percent_Cam).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
     var n_samples_Agr = ee.Number(ee.Number(nSamplesMax).multiply(percent_Agr).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
     var n_samples_Anv = ee.Number(ee.Number(nSamplesMax).multiply(percent_Anv).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
-    var n_samples_Afr = ee.Number(ee.Number(nSamplesMax).multiply(percent_Afr).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
+ //   var n_samples_Afr = ee.Number(ee.Number(nSamplesMax).multiply(percent_Afr).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
     var n_samples_Agu = ee.Number(ee.Number(nSamplesMax).multiply(percent_Agu).divide(100)).round().int16().max(nSamplesMin).min(nSamplesMax)
 
     var SS_Flo_samples = SS_Flo.randomColumn().sort('random').limit(n_samples_Flo)
@@ -616,7 +422,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
     var SS_Cam_samples = SS_Cam.randomColumn().sort('random').limit(n_samples_Cam)
     var SS_Agr_samples = SS_Agr.randomColumn().sort('random').limit(n_samples_Agr)
     var SS_Anv_samples = SS_Anv.randomColumn().sort('random').limit(n_samples_Anv)
-    var SS_Afr_samples = SS_Afr.randomColumn().sort('random').limit(n_samples_Afr)
+//    var SS_Afr_samples = SS_Afr.randomColumn().sort('random').limit(n_samples_Afr)
     var SS_Agu_samples = SS_Agu.randomColumn().sort('random').limit(n_samples_Agu)
 
 //    print('SS_Flo_samples',SS_Flo_samples)
@@ -630,7 +436,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
             .merge(SS_Cam_samples)
             .merge(SS_Agr_samples)
             .merge(SS_Anv_samples)
-            .merge(SS_Afr_samples)
+  //          .merge(SS_Afr_samples)
             .merge(SS_Agu_samples)
     
     
@@ -640,7 +446,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
       SS_Cam_samples.size().subtract(n_samples_Cam),
       SS_Agr_samples.size().subtract(n_samples_Agr),
       SS_Anv_samples.size().subtract(n_samples_Anv),
-      SS_Afr_samples.size().subtract(n_samples_Afr),
+ //     SS_Afr_samples.size().subtract(n_samples_Afr),
       SS_Agu_samples.size().subtract(n_samples_Agu)])
     
     //print('falta amostras SS_Flo',SS_Flo_samples.size().subtract(n_samples_Flo))
@@ -663,14 +469,15 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
                 .merge(campo)
                 .merge(agric)
                 .merge(anv)
-                .merge(arocho)
+ //               .merge(arocho)
                 .merge(agua)
                 
     // Samples 
     var trainingComp = mosaicoTotal.sampleRegions({
         'collection': pontos_complementares,
         'properties': ['reference'],
-        'scale': 30
+        'scale': 30,
+        'tileScale': 4
     });
     var complementares = trainingComp.map(function (feature) {return feature.set('comp_coll', '7')});
   }
@@ -682,7 +489,7 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
     var training = SS_amostras.merge(complementares)
     //var training = complementares
   }  
-
+ 
   //classificador sem informações de importÂncia e arvores 
   //print(training.first())
   var classifier = ee.Classifier.smileRandomForest({numberOfTrees: RFtrees, variablesPerSplit:1}).train(training, 'reference', bandNamesShort);
@@ -698,15 +505,36 @@ for (var i_ano=0;i_ano<anos.length; i_ano++){
   if(debug == 1){
     //camadas usadas para o processo de coleta de amostras
     //ajsutar para coleção preliminar da versao 5
-    var colecao6 = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/class_col6_mosaic/PAMPA_03')
-        colecao6 = colecao6.select('classification_'+ano)
+//    var colecao6 = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/class_col6_mosaic/PAMPA_03')
+//        colecao6 = colecao6.select('classification_'+ano)
+//        .clip(limite)
+
+  var img = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col8/PAMPA/estabilidade_colecoes/pampa_colecoes_' + ano)
+  var estabilidadeMask = img.select('classes').lte(1).selfMask().clip(limite)
+    
+
+  var colecao_ante = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/class_col7_mosaic/PAMPA_034_final_com_filtro')
+ // var colecao_ante = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col8/PAMPA/class_col_8_mosaic/PAMPA_02_com_filtro')
+        colecao_ante = colecao_ante.select('classification_'+ano)
         .clip(limite)
-        
+
     Map.addLayer(mosaicoTotal, visParMedian, 'Img_Year_' + String(ano), false)  
-    Map.addLayer(colecao6, vis, 'Colecao 6 - ' +  ano, false)
-    Map.addLayer(classified, vis, 'RF Teste ' + ano)
-    var img_dif = diferenca(colecao6,classified,classe_diferenca, false)
+    Map.addLayer(colecao_ante, vis, 'Colecao Anterior - ' +  ano, false)
+ // Map.addLayer(colecao6, vis, 'Colecao 6 - ' +  ano, false)
+    Map.addLayer(classified.mask(estabilidadeMask.unmask(0).eq(0)), vis, 'RF Teste ' + ano,false)
+
+// agrega a classificacao random forest nova com a classificacao estável das col anteriores
+    var out_class = classified.mask(estabilidadeMask.unmask(0).eq(0)).blend(img.select('mode').mask(estabilidadeMask))
+    Map.addLayer(out_class, vis, 'Blend' + ano,false)
+    
+ // var img_dif = diferenca(colecao6,classified,classe_diferenca, false)
+    var img_dif = diferenca(colecao_ante,classified,classe_diferenca, false)
     Map.addLayer(img_dif,vischange,'Diferença classe ' + String(classe_diferenca) + ' ' + String(ano),false)
+
+    var imageVisParam = {"opacity":1,"min":1,"max":5,"palette":["555555","d9d9d9","dbed55","ff5050","990033"]};
+    Map.addLayer(estabilidadeMask,imageVisParam,'estabilidade' + ano, false)
+    
+    //classified = out_class
   }
   if (i_ano == 0){ var classified85a21 = classified }  
   else {classified85a21 = classified85a21.addBands(classified); }
@@ -742,8 +570,8 @@ classified85a21 = classified85a21
 
 Export.image.toAsset({
   'image': classified85a21.toInt8(),
-  'description': regiao+'-'+'RF85a21_v'+version_out,
-  'assetId': dirout + '0'+ regiao + '_' + 'RF85a21_v'+version_out,
+  'description': regiao + '-'+'RF_col' + collection_out + '_v' + version_out,
+  'assetId': dirout + '0'+ regiao + '_' + 'RF_col' + collection_out + '_v' + version_out,
    'scale': 30,
   'pyramidingPolicy': {
       '.default': 'mode'
@@ -822,7 +650,7 @@ if (debug == 1){
     print('Área da classe 12 ano: ' + ano_calcula_area +  ' ' , areas.filterMetadata('classe','equals',12).first().get('area'))
     print('Área da classe 21 ano: ' + ano_calcula_area +  ' ' , areas.filterMetadata('classe','equals',21).first().get('area'))
     print('Área da classe 22 ano: ' + ano_calcula_area +  ' ' , areas.filterMetadata('classe','equals',22).first().get('area'))
-    print('Área da classe 29 ano: ' + ano_calcula_area +  ' ' , areas.filterMetadata('classe','equals',29).first().get('area'))
+//    print('Área da classe 29 ano: ' + ano_calcula_area +  ' ' , areas.filterMetadata('classe','equals',29).first().get('area'))
     print('Área da classe 33 ano: ' + ano_calcula_area +  ' ' , areas.filterMetadata('classe','equals',33).first().get('area'))
   }
   
