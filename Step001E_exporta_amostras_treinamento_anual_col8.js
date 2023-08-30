@@ -1,29 +1,16 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #d63000 */
-    /* shown: false */
-    /* displayProperties: [
-      {
-        "type": "rectangle"
-      }
-    ] */
-    ee.Geometry.Polygon(
-        [[[-54.453937581812845, -30.058022363732242],
-          [-54.453937581812845, -32.16478393689188],
-          [-52.256671956812845, -32.16478393689188],
-          [-52.256671956812845, -30.058022363732242]]], null, false);
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // MAPBIOMAS PAMPA
 // COLLECTION 06
 // AUTHOR: Juliano Schirmbeck
 // DATE: maio 2021
 
-var version = '2' // versão dos mosaicos
-var version_amostras = 'v06'
+var out_collection = 8 
 
-var sufix = '_85_94', anos = [1990]//[1985,1986,1987,1988,1989, 1990,1991,1992,1993,1994];
-var sufix = '_95_04', anos = [2000]//[1995,1996,1997,1998,1999, 2000,2001,2002,2003,2004];
-var sufix = '_05_20_LabGeo' , anos = [2010,2017,2020]//[2005,2006,2007,2008,2009, 2010,2011,2012,2013,2014, 2015,2016,2017,2018,2019, 2020,2021 ];
+var version = '2' // versão dos mosaicos
+var version_amostras = 'v01'
+
+var sufix = '_85_94', anos = [1985,1986,1987,1988,1989, 1990,1991,1992,1993,1994];
+//var sufix = '_95_04', anos = [1995,1996,1997,1998,1999, 2000,2001,2002,2003,2004];
+var sufix = '_05_21_LabGeo' , anos = [2022] //anos = [2005,2006,2007,2008,2009, 2010,2011,2012,2013,2014, 2015,2016,2017,2018,2019,2020,2021,2022];
 
 //var sufix = '_85_20_LabGeo' , 
 
@@ -31,13 +18,13 @@ var sufix = '_05_20_LabGeo' , anos = [2010,2017,2020]//[2005,2006,2007,2008,2009
 //                                      2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014, 2015,2016,2017,2018,2019, 2020,2021 ];
 //anos = [1990,2000,2010,2017,2020]
 
-var dirout = 'projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/SAMPLES/' + version_amostras+'/';
+var dirout = 'projects/mapbiomas-workspace/AMOSTRAS/col' + out_collection + '/PAMPA/SAMPLES/' + version_amostras+'/';
 //local dos mosaicos
 var dirasset =  'projects/nexgenmap/MapBiomas2/LANDSAT/BRAZIL/mosaics-2-pampa';  
 
 //pontos de entrada, extraidos do mapa de estáveis
-//var pts = ee.FeatureCollection('projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/samples_col7_PAMPA' + sufix)
-var pts = ee.FeatureCollection('projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/samples_col7_PAMPA_com_LabGeo')
+var pts = ee.FeatureCollection('projects/mapbiomas-workspace/AMOSTRAS/col' + out_collection + '/PAMPA/samples_col' + out_collection + '_PAMPA' + sufix)
+//var pts = ee.FeatureCollection('projects/mapbiomas-workspace/AMOSTRAS/col7/PAMPA/samples_col7_PAMPA_com_LabGeo')
 //Map.addLayer(pts, {}, 'pontos', false)
 print('pontos',pts.first())
 //var pts_reg = pts.filterMetadata('ID', 'equals', 1)
