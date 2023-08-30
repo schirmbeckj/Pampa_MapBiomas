@@ -1,12 +1,12 @@
 // MAPBIOMAS PAMPA
-// COLLECTION 05 
+// COLLECTION 08
 // AUTHOR: Juliano Schirmbeck
 // DATE: August 2020
 //
 //  Randon Forest to region 06
 
-var version = '033'
-var col = '7'
+var version = '07'
+var col = '8'
 
 var versionOut = version + '_pre_incidentes'
 var versionIn = version + '_gap'
@@ -14,9 +14,10 @@ var versionIn = version + '_gap'
 var anos = [                            '1985','1986','1987','1988','1989','1990',
             '1991','1992','1993','1994','1995','1996','1997','1998','1999','2000',
             '2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
-            '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021'];
+            '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020',
+            '2021','2022'];
 
-var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '_filtros/'
+var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
 var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
 
 var palettes = require('users/mapbiomas/modules:Palettes.js');
@@ -32,7 +33,8 @@ var visParMedian = {'bands':['median_swir1','median_nir','median_red'], 'gain':[
 var classeIds =    [3,11,12,21,22,29,33]
 var newClasseIds = [3,11,12,21,22,29,33]
  
-var regioes = [1,2,3,4,5,6,7]
+var regioes = [1,2,3,4,5,6,
+                7]
 
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var regiao = regioes[i_regiao];
@@ -40,7 +42,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   
   var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
   
-  var image_in =  ee.Image(dir_filtros+ '0' + String(regiao) +'_RF85a21_v' + versionIn);
+  var image_in =  ee.Image(dir_filtros+ '0' + String(regiao) +'_RF_col'+col+'_v' + versionIn);
   
 
   
@@ -68,7 +70,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   // ******* incidence **********
   
   var vis2 = {
-      'bands': '2018',
+      'bands': '1987',
       'min': 0,
       'max': 34,
       'palette': palettes.get('classification2')
@@ -82,10 +84,10 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                                   'classification_2005', 'classification_2006', 'classification_2007', 'classification_2008', 'classification_2009', 
                                   'classification_2010', 'classification_2011', 'classification_2012', 'classification_2013', 'classification_2014',
                                   'classification_2015', 'classification_2016', 'classification_2017', 'classification_2018', 'classification_2019',
-                                  'classification_2020','classification_2021'],
+                                  'classification_2020','classification_2021','classification_2022'],
                                  ['1985', '1986', '1987','1988', '1989', '1990','1991', '1992', '1993','1994', '1995', '1996','1997', '1998', '1999',
                                   '2000', '2001', '2002','2003', '2004', '2005','2006', '2007', '2008','2009', '2010', '2011','2012', '2013', '2014',
-                                  '2015', '2016', '2017', '2018','2019','2020','2021'])
+                                  '2015', '2016', '2017', '2018','2019','2020','2021','2022'])
   Map.addLayer(image_in, vis2, 'MapBiomas');
   
   Map.addLayer(image_incidence, {}, "incidents original");
@@ -97,13 +99,13 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   
   print('image_incidence',image_incidence)
   Map.addLayer(image_incidence, {}, "incidents final");
-  Map.addLayer(image_incidence.select('valor1'))
+  Map.addLayer(image_incidence.select('classification_mode'),vis,'moda' + regiao)
   
   
   Export.image.toAsset({
       'image': image_incidence,
-      'description': '0' + String(regiao) + '_RF85a21_v' + versionOut,
-      'assetId': dir_filtros + '0' + String(regiao) + '_RF85a21_v' + versionOut,
+      'description': '0' + String(regiao) + '_RF_col' + col + '_v' + versionOut,
+      'assetId': dir_filtros +  '0' + String(regiao) + '_RF_col' + col + '_v'  + versionOut,
       'pyramidingPolicy': {
           '.default': 'mode'
       },
