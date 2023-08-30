@@ -1,5 +1,5 @@
 // MAPBIOMAS PAMPA
-// COLLECTION 06
+// COLLECTION 08
 // AUTHOR: Juliano Schirmbeck
 // DATE: maio 2021
 //
@@ -8,14 +8,15 @@
 // calcula a camada de mesma classe conectados para uso em filtros de correção espacial
 //
 
-var col = '7'
+var col = '8'
 
-var versionIn = '034'
+var versionIn = '07'
 var bioma = "PAMPA"
 var versionOut = versionIn + '_gap'
 
-var regioes = [1,6,7,2,3,4,5
-                        ]
+var regioes = [1,6,
+                7,2,3,4,5
+                ]
 
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var regiao = regioes[i_regiao];
@@ -23,16 +24,17 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   var anos = ['1985','1986','1987','1988','1989','1990',
               '1991','1992','1993','1994','1995','1996','1997','1998','1999','2000',
               '2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
-              '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021'];
+              '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020',
+              '2021','2022'];
   
   
-  var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '/'
-  var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '_filtros/'
+  var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '/'
+  var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
   
   var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
   var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
   
-  var image = ee.Image(dircol_in +  '0' + String(regiao) +'_RF85a21_v' + versionIn);
+  var image = ee.Image(dircol_in +  '0' + String(regiao) +'_RF_col'+ col +'_v' + versionIn);
   image = image.mask(image.neq(0))
   print(image)
   //sempre usa um ano a menos, o primeiro
@@ -54,7 +56,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
       'classification_2014','classification_2015',
       'classification_2016','classification_2017',
       'classification_2018','classification_2019',
-      'classification_2020','classification_2021'
+      'classification_2020','classification_2021',
+      'classification_2022'
   ]);
   
   var filtered = bandNames.iterate(function (bandName, previousImage) {
@@ -84,7 +87,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
       'classification_2013','classification_2014',
       'classification_2015','classification_2016',
       'classification_2017','classification_2018',
-      'classification_2019','classification_2020'
+      'classification_2019','classification_2020',
+      'classification_2021'
   ]);
   
   var filtered2 = bandNames.iterate(function (bandName, previousImage) {
@@ -92,7 +96,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   	previousImage = ee.Image(previousImage);
   	currentImage = currentImage.unmask(previousImage.select(previousImage.bandNames().length().subtract(1)));
   	return previousImage.addBands(currentImage);
-  }, ee.Image(filtered.select(["classification_2021"])));
+  }, ee.Image(filtered.select(["classification_2022"])));
   
   
   filtered2 = ee.Image(filtered2)
@@ -115,8 +119,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   
   Export.image.toAsset({
       'image': filtered2,
-      'description': '0' + String(regiao) +'_RF85a21_v' + versionOut,
-      'assetId': dir_filtros +  '0'+ String(regiao) +'_RF85a21_v'  + versionOut,
+      'description': '0' + String(regiao) + '_RF_col' + col + '_v' + versionOut,
+      'assetId': dir_filtros +  '0' + String(regiao) + '_RF_col' + col + '_v'  + versionOut,
       'pyramidingPolicy': {
           '.default': 'mode'
       },
