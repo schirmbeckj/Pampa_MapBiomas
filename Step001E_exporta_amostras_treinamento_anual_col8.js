@@ -1,5 +1,5 @@
 // MAPBIOMAS PAMPA
-// COLLECTION 06
+// COLLECTION 08
 // AUTHOR: Juliano Schirmbeck
 // DATE: maio 2021
 
