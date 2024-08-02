@@ -1,50 +1,47 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.Point([-52.73894839484851, -29.931293816338716]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // MAPBIOMAS PAMPA
-// COLLECTION 09
+// COLLECTION 05 
 // AUTHOR: Juliano Schirmbeck
-// UPDATE: May 2021
+// DATE: August 2020
+// 
+//  Randon Forest to region 06
 
 
-// ***************************************************************************************
-// Define as variáveis referentes a versão da coleção ou dos filtros
-print('aa')
-var col = 9
-var version = '10'
-print('aa') 
+var version = '033'
+var col = '7'
 var bioma = "PAMPA"
-var versionOut = version + '_final'
-var versionIn = version + '_esp_pos_inci'
-
-// Define as regiões: [1,2,3,4,5,6,7]
-var regioes = [1,2,3,4,5,6,7]
-
-// ***************************************************************************************
-
+  
+var versionOut = version + 'b_temp'
+var versionIn = version + '_esp'
+  
 
 var anos3 = ['1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999',
 '2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015'
-,'2016','2017','2018','2019','2020','2021','2022'];
+,'2016','2017','2018','2019','2020'];
 var anos4 = ['1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999',
 '2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015',
-'2016','2017','2018','2019','2020','2021'];
+'2016','2017','2018','2019'];
 var anos5 = ['1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999',
 '2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015',
-'2016','2017','2018','2019','2020'];
+'2016','2017','2018'];
 
-var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
-var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col09_buff')
-
-var palettes = require('users/mapbiomas/modules:Palettes.js');
-var vis = {'min': 0, 'max': 62,  'palette': palettes.get('classification8')};
-
-
+var regioes = [//1,2,3,4,5,
+                6,7
+                  ]
+                 
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
-    var regiao = regioes[i_regiao];
-    
+  var regiao = regioes[i_regiao];
+  
+  var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '_filtros/'
+  var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
   var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
   
-  var image_in = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF_col'+col+'_v' + versionIn);
+  var image_in = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF85a21_v' + versionIn);
   print(image_in)
-
+var palettes = require('users/mapbiomas/modules:Palettes.js');
+var vis = {'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
   
   var mask3 = function(valor, ano, imagem){
     var mask = imagem.select('classification_'+ (parseInt(ano) - 1)).eq (valor)
@@ -85,9 +82,9 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
        var ano = anos5[i_ano];  
        img_out = img_out.addBands(mask5(valor,ano, imagem)) 
      }
+       img_out = img_out.addBands(imagem.select('classification_2019'))
        img_out = img_out.addBands(imagem.select('classification_2021'))
-       img_out = img_out.addBands(imagem.select('classification_2022'))
-       img_out = img_out.addBands(imagem.select('classification_2023'))
+       img_out = img_out.addBands(imagem.select('classification_2021'))
      return img_out
   }
   
@@ -96,8 +93,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
      for (var i_ano=0;i_ano<anos4.length; i_ano++){  
        var ano = anos4[i_ano];  
        img_out = img_out.addBands(mask4(valor,ano, imagem)) }
-       img_out = img_out.addBands(imagem.select('classification_2022'))
-       img_out = img_out.addBands(imagem.select('classification_2023'))
+       img_out = img_out.addBands(imagem.select('classification_2020'))
+       img_out = img_out.addBands(imagem.select('classification_2021'))
      return img_out
   }
   
@@ -106,7 +103,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
      for (var i_ano=0;i_ano<anos3.length; i_ano++){  
        var ano = anos3[i_ano];   
        img_out = img_out.addBands(mask3(valor,ano, imagem)) }
-       img_out = img_out.addBands(imagem.select('classification_2023'))
+       img_out = img_out.addBands(imagem.select('classification_2021'))
      return img_out
   }
   
@@ -116,7 +113,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var ano = anos3[i_ano]; 
     original = original.addBands(image_in.select('classification_'+ano)) 
   }
-  original = original.addBands(image_in.select('classification_2023'))
+  original = original.addBands(image_in.select('classification_2021'))
   
   var filtered = original
   
@@ -161,18 +158,16 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                                 imagem.select('classification_2018'),
                                 imagem.select('classification_2019'),
                                 imagem.select('classification_2020'),
-                                imagem.select('classification_2021'),
-                                imagem.select('classification_2022'),
-                                imagem.select('classification_2023')])
+                                imagem.select('classification_2021')])
     return img_out;
   }
   
   //print(filtered)
   var mask3last = function(valor, imagem){
-    var mask = imagem.select('classification_2021').eq (valor)
-          .and(imagem.select('classification_2022').eq(valor))
-          .and(imagem.select('classification_2023').neq (valor))
-    var muda_img = imagem.select('classification_2023').mask(mask.eq(1)).where(mask.eq(1), valor);  
+    var mask = imagem.select('classification_2018').eq (valor)
+          .and(imagem.select('classification_2019').eq(valor))
+          .and(imagem.select('classification_2020').neq (valor))
+    var muda_img = imagem.select('classification_2020').mask(mask.eq(1)).where(mask.eq(1), valor);  
     var img_out = imagem.select('classification_1985')
     img_out = img_out.addBands([imagem.select('classification_1986'),
                                 imagem.select('classification_1987'),
@@ -208,10 +203,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
                                 imagem.select('classification_2017'),
                                 imagem.select('classification_2018'),
                                 imagem.select('classification_2019'),
-                                imagem.select('classification_2020'),
-                                imagem.select('classification_2021'),
-                                imagem.select('classification_2022')])
-    var img_out = img_out.addBands(imagem.select('classification_2023').blend(muda_img))
+                                imagem.select('classification_2020')])
+    var img_out = img_out.addBands(imagem.select('classification_2021').blend(muda_img))
     return img_out;
   }
   
@@ -232,22 +225,73 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   print(filtered)
   
   //ordem de execução geral
-  var ordem_exec = [29, 22, 21, 11, 3, 12, 33];
+  var ordem_exec_4y = [21]//29, 11, 3, 21, 12];
+  for (var i_class=0;i_class<ordem_exec_4y.length; i_class++){  
+     var id_class = ordem_exec_4y[i_class]; 
+     filtered = window4years(filtered, id_class)
+  }
   
-  for (var i_class=0;i_class<ordem_exec.length; i_class++){  
-     var id_class = ordem_exec[i_class]; 
+  var ordem_exec_3y = [29, 22, 21, 11, 3, 12, 33];
+  for (var i_class=0;i_class<ordem_exec_3y.length; i_class++){  
+     var id_class = ordem_exec_3y[i_class]; 
      filtered = window3years(filtered, id_class)
   }
   
-  var vis = {'bands': 'classification_2017','min': 0, 'max': 62,  'palette': palettes.get('classification8')};
+  var exp = '100*((b( 0)+b( 1)+b( 2)+b( 3)+b( 4)+b( 5)+b( 6)+b( 7)+b( 8)+b( 9)'+
+               '+b(10)+b(11)+b(12)+b(13)+b(14)+b(15)+b(16)+b(17)+b(18)+b(19)'+
+               '+b(20)+b(21)+b(22)+b(23)+b(24)+b(25)+b(26)+b(27)+b(28)+b(29)'+
+               '+b(30)+b(31)+b(32)+b(33)+b(34)+b(35)+b(36))/37)';
+               
+    // get frequency
+  var freq  = filtered.eq( 3).expression(exp).rename('b3')
+              .addBands(filtered.eq(11).expression(exp).rename('b11'))
+              .addBands(filtered.eq(12).expression(exp).rename('b12'))
+              .addBands(filtered.eq(22).expression(exp).rename('b22'))
+              .addBands(filtered.eq(29).expression(exp).rename('b29'))
+              .addBands(filtered.eq(33).expression(exp).rename('b33'))
+              .addBands(filtered.eq(21).expression(exp).rename('b21'))
+               
+  var mask3_inv = function (valor, ano, imagem) {
+    var mask = imagem.select('classification_' + (parseInt(ano) - 1)).neq(valor)
+        .and(imagem.select('classification_' + (ano)).eq(valor).and(freq.select('b'+ String(valor)).lt(10)))
+        .and(imagem.select('classification_' + (parseInt(ano) + 1)).neq(valor))
+    var muda_img = imagem.select('classification_' + (ano)).mask(mask.eq(1))
+                                  .gt(0)
+                                  .multiply(imagem.select('classification_' + (parseInt(ano) + 1)));
+    var img_out = imagem.select('classification_' + ano).blend(muda_img)
+    return img_out;
+  }
+  var window3years_inv = function (imagem, valor) {
+    var img_out = imagem.select('classification_1985')
+    for (var i_ano = 0; i_ano < anos3.length; i_ano++) {
+        var ano = anos3[i_ano];
+        img_out = img_out.addBands(mask3_inv(valor, ano, imagem))
+    }
+    img_out = img_out.addBands(imagem.select('classification_2021'));
+    return img_out
+  }   
+  
+  var vis = {'bands': 'classification_1993','min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+  
+  Map.addLayer(original, vis, 'original',false);
+  Map.addLayer(filtered, vis, 'pre inv');
+  var ordem_exec_3y_inv = [29, 22, 12, 21, 11, 3, 12, 33];
+  for (var i_class=0;i_class<ordem_exec_3y_inv.length; i_class++){  
+     var id_class = ordem_exec_3y_inv[i_class]; 
+     filtered = window3years_inv(filtered, id_class)
+  }             
+  
+  
+  //print('filtered_inv',filtered_inv);
+
+  Map.addLayer(filtered, vis, 'filtered',false);
   
   filtered = filtered.set('version', versionOut)
-  Map.addLayer(image_in,vis,'image_in')
-  Map.addLayer(filtered,vis,'filtered')
+  
   Export.image.toAsset({
       'image': filtered,
-      'description': + '0' + String(regiao) +'_RF_col'+col+'_v'+versionOut,
-      'assetId': dir_filtros + '0' + String(regiao) +'_RF_col'+col+'_v'+versionOut,
+      'description': + '0' + String(regiao) +'_RF85a21_v'+versionOut,
+      'assetId': dir_filtros + '0' + String(regiao) +'_RF85a21_v'+versionOut,
       'pyramidingPolicy': {
           '.default': 'mode'
       },
