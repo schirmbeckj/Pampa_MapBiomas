@@ -3,13 +3,13 @@
 // AUTHOR: Juliano Schirmbeck
 // DATE: August 2020
 
-var out_collection = 8 
+var out_collection = 9 
  
 var bioma = "PAMPA";
 var nSamples = 2000
-var sufix = '_05_21_LabGeo'
-var sufix = '_85_94'
-var sufix = '_95_04' 
+var sufix = '_13_22_com_LabGeo'
+var sufix = '_99_12_com_LabGeo'
+var sufix = '_85_98' 
 
 var dir = 'projects/mapbiomas-workspace/AMOSTRAS/col' + out_collection + '/PAMPA/'
 var outname = 'samples_col' + out_collection + '_PAMPA' + sufix
