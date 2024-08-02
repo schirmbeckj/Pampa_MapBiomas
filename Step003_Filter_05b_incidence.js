@@ -1,68 +1,65 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #d63000 */
-    /* shown: false */
-    ee.Geometry.MultiPoint();
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // MAPBIOMAS PAMPA
-// COLLECTION 05 
+// COLLECTION 09
 // AUTHOR: Juliano Schirmbeck
-// DATE: August 2020
-//prepara_incidentes_3_e_21
-//prepara_incidentes_multiclasses
+// UPDATE: May 2024
 
-
-var version = '033'
-var col = '7'
-
+// ***************************************************************************************
+// Define as variáveis referentes a versão da coleção ou dos filtros
+var version = '12'
+var col = 9
 var bioma = "PAMPA"
-
 var versionOut = version +  '_inci'
-
 var versionIn = version + '_freq'
 var versionIncidentes = version +  '_pre_incidentes'
+
+// Define as regiões: [1,2,3,4,5,6,7]
+var regioes = [1,2,3,4,5,6,7]
+
+// ***************************************************************************************
+
+
 
 var anos3 = [                                   '1986','1987','1988','1989','1990',
              '1991','1992','1993','1994','1995','1996','1997','1998','1999','2000',
              '2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
-             '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021'];       
+             '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020',
+             '2021','2022','2023'];       
              
 var anos = [                            '1985','1986','1987','1988','1989','1990',
             '1991','1992','1993','1994','1995','1996','1997','1998','1999','2000',
             '2001','2002','2003','2004','2005','2006','2007','2008','2009','2010',
-            '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021'];
+            '2011','2012','2013','2014','2015','2016','2017','2018','2019','2020',
+            '2021','2022','2023'];
 
-var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '/'
-var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col' + col + '_filtros/'
-var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
+var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '/'
+var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
+var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col09_buff')
 
 var palette_incidence = ["#C8C8C8","#FED266","#FBA713","#cb701b", "#cb701b", "#a95512", "#a95512", "#662000",  "#662000", "#cb181d"]
 var palettes = require('users/mapbiomas/modules:Palettes.js');
-var pal = palettes.get('classification2');
+var pal = palettes.get('classification8');
 var vis = {
       bands: 'classification_2018',
       min:0,
-      max:34,
+      max:62,
       palette: pal,
       format: 'png' 
     };
 var vis2 = {
       min:0,
-      max:34,
+      max:62,
       palette: pal,
       format: 'png'
     };
-
-var regioes = [1,2,3,4,5,6,7]
 
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var regiao = regioes[i_regiao];
 
   var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
   
-  var image_in =  ee.Image(dir_filtros+ '0' + String(regiao) +'_RF85a21_v' + versionIn);
-  var image_incidence_outros = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF85a21_v' +  versionIncidentes);
-  var image_pre_gap = ee.Image(dir_filtros +  '0' + String(regiao) +'_RF85a21_v' + versionIn);
+  var image_in =  ee.Image(dir_filtros+ '0' + String(regiao) +'_RF_col'+col+'_v' + versionIn);
+  var image_incidence_outros = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF_col'+col+'_v' +  versionIncidentes);
+  var image_pre_gap = ee.Image(dir_filtros +  '0' + String(regiao) +'_RF_col'+col+'_v' + versionIn);
   
   
   Map.addLayer(image_in, vis, 'image_in');
@@ -81,20 +78,20 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   Map.addLayer(corrige_borda2, vis2, 'corrige_borda2', false);
   print('image_incidence_outros',image_incidence_outros)
   
-  var windowCorrecao = function(imagem, correcao, ano_alterar){
-     var img_out = imagem.select('classification_1985')
-     for (var i_ano=0;i_ano<anos3.length; i_ano++){  
-       var ano = anos3[i_ano];
-       if (ano < ano_alterar) {
-         img_out = img_out.addBands(imagem.select('classification_'+ano))
-       } else {
-         img_out = img_out.addBands(imagem.select('classification_'+ano).blend(correcao))
-       }
-     }
-     return img_out
-  }
-  
-  var class_out = 21
+//  var windowCorrecao = function(imagem, correcao, ano_alterar){
+//     var img_out = imagem.select('classification_1985')
+//     for (var i_ano=0;i_ano<anos3.length; i_ano++){  
+//       var ano = anos3[i_ano];
+//       if (ano < ano_alterar) {
+//         img_out = img_out.addBands(imagem.select('classification_'+ano))
+//       } else {
+//         img_out = img_out.addBands(imagem.select('classification_'+ano).blend(correcao))
+//       }
+//     }
+//     return img_out
+//  }
+//  
+//  var class_out = 21
   image_in_corrigida = image_in_corrigida.blend(corrige_borda2) //a
   
   Map.addLayer(image_in_corrigida, vis, 'image_in corrigida');
@@ -109,8 +106,8 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   
   Export.image.toAsset({
       'image': image_in_corrigida,
-      'description': '0' + String(regiao) + '_RF85a21_v' + versionOut,
-      'assetId': dir_filtros + '0' + String(regiao) + '_RF85a21_v' + versionOut,
+      'description': '0' + String(regiao) + '_RF_col' + col + '_v' + versionOut,
+      'assetId': dir_filtros +  '0' + String(regiao) + '_RF_col' + col + '_v'  + versionOut,
       'pyramidingPolicy': {
           '.default': 'mode'
       },
