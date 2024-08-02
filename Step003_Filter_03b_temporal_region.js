@@ -1,44 +1,45 @@
 // MAPBIOMAS PAMPA
-// COLLECTION 08
+// COLLECTION 09 
 // AUTHOR: Juliano Schirmbeck
-// DATE: August 2020
-// 
-//  Randon Forest to region 06
+// UPDATE: May 2024
 
 
-var version = '07'
-var col = '8'
+// ***************************************************************************************
+// Define as variáveis referentes a versão da coleção ou dos filtros
+var version = '12'
+var col = '9'
 var bioma = "PAMPA"
-  
 var versionOut = version + '_temp2'
 var versionIn = version + '_temp'
-  
+
+// Define as regiões: [1,2,3,4,5,6,7]
+var regioes = [1,2,3,4,5,6,7]
+
+// ***************************************************************************************
 
 var anos3 = ['1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999',
 '2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015'
-,'2016','2017','2018','2019','2020','2021'];
+,'2016','2017','2018','2019','2020','2021','2022'];
 var anos4 = ['1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999',
 '2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015',
-'2016','2017','2018','2019','2020'];
+'2016','2017','2018','2019','2020','2021'];
 var anos5 = ['1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999',
 '2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015',
-'2016','2017','2018','2019'];
+'2016','2017','2018','2019','2020'];
 
-var regioes = [1,2,3,4,5,6,
-                7]
                  
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   var regiao = regioes[i_regiao];
   
   var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
-  var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
+  var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col09_buff')
   var limite = regioesCollection.filterMetadata('ID', 'equals', regiao);
   
   var image_in = ee.Image(dir_filtros+ '0' + String(regiao) +'_RF_col' + col + '_v' + versionIn);
   print(image_in)
 var palettes = require('users/mapbiomas/modules:Palettes.js');
-var vis = {'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
-var vis = {'bands': 'classification_2015','min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+var vis = {'min': 0, 'max': 62,  'palette': palettes.get('classification8')};
+var vis = {'bands': 'classification_2015','min': 0, 'max': 62,  'palette': palettes.get('classification8')};
   
   //nova função de 5 anos
 //  var window5years = function(imagem, valor){
@@ -87,7 +88,7 @@ var vis = {'bands': 'classification_2015','min': 0, 'max': 45,  'palette': palet
     var ano = anos3[i_ano]; 
     original = original.addBands(image_in.select('classification_'+ano)) 
   }
-  original = original.addBands(image_in.select('classification_2022'))
+  original = original.addBands(image_in.select('classification_2023'))
   
   var filtered = original
   
@@ -270,7 +271,7 @@ var vis = {'bands': 'classification_2015','min': 0, 'max': 45,  'palette': palet
 //     return imagem
 //  }
  
-  var vis = {'bands': 'classification_2003','min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+  var vis = {'bands': 'classification_2003','min': 0, 'max': 62,  'palette': palettes.get('classification8')};
   
   Map.addLayer(original, vis, 'original',false);
 //  Map.addLayer(filtered, vis, 'pre inv');
@@ -286,7 +287,7 @@ var vis = {'bands': 'classification_2015','min': 0, 'max': 45,  'palette': palet
   var window5years_abs = function(imagem, valor){
      for (var i_ano=0;i_ano<anos5.length; i_ano++){  
         var ano = anos5[i_ano];  
-        var mask = imagem.select('classification_1985').neq (valor).and(imagem.select('classification_2022').neq (valor)) 
+        var mask = imagem.select('classification_1985').neq (valor).and(imagem.select('classification_2023').neq (valor)) 
             .and(imagem.select('classification_'+ (parseInt(ano) - 1)).neq (valor))
             .and(imagem.select('classification_'+ (ano)              ).eq(valor))
             .and(imagem.select('classification_'+ (parseInt(ano) + 1)).eq(valor))
@@ -308,7 +309,7 @@ var vis = {'bands': 'classification_2015','min': 0, 'max': 45,  'palette': palet
   var window4years_abs = function(imagem, valor){
      for (var i_ano=0;i_ano<anos4.length; i_ano++){  
        var ano = anos4[i_ano];  
-        var mask = imagem.select('classification_1985').neq (valor).and(imagem.select('classification_2022').neq (valor)) 
+        var mask = imagem.select('classification_1985').neq (valor).and(imagem.select('classification_2023').neq (valor)) 
             .and(imagem.select('classification_'+ (parseInt(ano) - 1)).neq (valor))
             .and(imagem.select('classification_'+ (ano)              ).eq(valor))
             .and(imagem.select('classification_'+ (parseInt(ano) + 1)).eq(valor))
@@ -330,7 +331,7 @@ var vis = {'bands': 'classification_2015','min': 0, 'max': 45,  'palette': palet
   var window3years_abs = function(imagem, valor){
      for (var i_ano=0;i_ano<anos3.length; i_ano++){  
        var ano = anos3[i_ano];  
-        var mask = imagem.select('classification_1985').neq (valor).and(imagem.select('classification_2022').neq (valor)) 
+        var mask = imagem.select('classification_1985').neq (valor).and(imagem.select('classification_2023').neq (valor)) 
             .and(imagem.select('classification_'+ (parseInt(ano) - 1)).neq (valor))
             .and(imagem.select('classification_'+ (ano)              ).eq(valor))
             .and(imagem.select('classification_'+ (parseInt(ano) + 1)).neq(valor))
