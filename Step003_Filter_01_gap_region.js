@@ -3,7 +3,7 @@
 // AUTHOR: Juliano Schirmbeck
 // UPDATE: May 2024
 
-// Filtro aplica a correção de nodata
+// Apply correction to no data values
 // Calcula a camada de mesma classe conectados para uso em filtros de correção espacial
 
 
