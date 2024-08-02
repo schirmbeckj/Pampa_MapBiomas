@@ -2,12 +2,15 @@
 // AUTHOR: Juliano Schirmbeck
 // DATE: maio 2023
 
-var out_collection = 8
+var out_collection = 9
+
+var periodo = '99_12'
 
 var dir = 'projects/mapbiomas-workspace/AMOSTRAS/col' + out_collection + '/PAMPA/'
-var outname = 'Pampa_amostras_estaveis_to_col' + out_collection + '_LabGeo'
-
-var estaveis_col = ee.Image(dir + 'Pampa_amostras_estaveis_to_col8_05_21')
+var outname = 'Pampa_amostras_estaveis_to_col' + out_collection + '_' + periodo + '_com_LabGeo'
+print(outname)
+var estaveis_col = ee.Image(dir + 'Pampa_amostras_estaveis_to_col9_' + periodo)
+//projects/mapbiomas-workspace/AMOSTRAS/col9/PAMPA/Pampa_amostras_estaveis_to_col9_13_22
 
 var estaveisLabGeo = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col5/PAMPA/Pampa_LabGeo_ss')
 
@@ -16,7 +19,12 @@ var palettes = require('users/mapbiomas/modules:Palettes.js');
 var vis = {'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
 
 var estaveis_com_LabGeo = estaveis_col.add(estaveisLabGeo.unmask(ee.Image(0)))
-                                  
+
+Map.addLayer(estaveisLabGeo, vis, 'estaveisLabGeo', true)
+
+//classes de entrada do Labgeo 100 para campo e 200 para agricultura
+//aceitas as combinações de 100 com 12 e de 200 com 21
+
 estaveis_com_LabGeo = estaveis_com_LabGeo.remap([  0,   3,  11,  12,  21,  22,  29,  33,
                                                  100, 103, 111, 112, 121, 122, 129, 133,
                                                  200, 203, 211, 212, 221, 222, 229, 233], 
