@@ -1,32 +1,33 @@
 // MAPBIOMAS PAMPA
-// COLLECTION 08
+// COLLECTION 09
 // AUTHOR: Juliano Schirmbeck
-// DATE: junho 2021
-//
-//  Randon Forest to region 06
+// UPDATE: May 2024
 
-
-var version = '07'
+// ***************************************************************************************
+// Define as variáveis referentes a versão da coleção ou dos filtros
+var version = '12'
 var version_hand = '01'
-var col = 8
-
+var col = 9
 var bioma = "PAMPA"
-  
-
 var versionOut = version + '_freq'
 var versionIn = version + '_temp2'
 var versionIncidentes = version +  '_pre_incidentes'
 
+// Define as regiões: [1,2,3,4,5,6,7]
+var regioes = [1,2,3,4,5,6,7]
+
+// ***************************************************************************************
+
 var dircol_in = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '/'
 var dir_filtros = 'projects/mapbiomas-workspace/AMOSTRAS/col' + col + '/PAMPA/class_col_' + col + '_filtros/'
-var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col05_buff')
+var regioesCollection = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/REGIOES/VETOR/PAMPA_regioes_col09_buff')
 var image_hand_class = ee.Image('projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/class_col6_filtros/classes_hand01')
                                  //'projects/mapbiomas-workspace/AMOSTRAS/col6/PAMPA/class_col6_filtros/classes_hand01
 
 var palettes = require('users/mapbiomas/modules:Palettes.js');
-var vis1 = { 'bands': 'classification_1987','min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+var vis1 = { 'bands': 'classification_1987','min': 0, 'max': 62,  'palette': palettes.get('classification8')};
 
-var vis = { 'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+var vis = { 'min': 0, 'max': 62,  'palette': palettes.get('classification8')};
 
 
 //Calculando frequencias
@@ -34,10 +35,8 @@ var vis = { 'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
 var exp = '100*((b( 0)+b( 1)+b( 2)+b( 3)+b( 4)+b( 5)+b( 6)+b( 7)+b( 8)+b( 9)'+
                '+b(10)+b(11)+b(12)+b(13)+b(14)+b(15)+b(16)+b(17)+b(18)+b(19)'+
                '+b(20)+b(21)+b(22)+b(23)+b(24)+b(25)+b(26)+b(27)+b(28)+b(29)'+
-               '+b(30)+b(31)+b(32)+b(33)+b(34)+b(35)+b(36)+b(37))/38)';
+               '+b(30)+b(31)+b(32)+b(33)+b(34)+b(35)+b(36)+b(37)+b(38))/39)';
 
-var regioes = [1,2,3,4,5,6,
-                7]
 
 for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     var regiao = regioes[i_regiao];
@@ -140,7 +139,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   //**********************************************
   //******** Reras do filtro de frequencia 2
   //**********************************************
-  // resolve arroz, area unmida e agua
+  // resolve arroz, area umida e agua
   if(aplicar.freq2){
     var vegMask = ee.Image(0)
                              .where(agricFreq.gt(1)  //adicionado para coll 5 força que tenha ao menos um ano de agricultura //redundante com a regra abaixo, valido se modificar outra classe
@@ -162,7 +161,7 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
   //**********************************************
   //******** Reras do filtro de frequencia 3
   //**********************************************
-  //afloramento rochoso + não vegetado
+  //Passo 1 -> afloramento rochoso + não vegetado 
   if (aplicar.freq3){
     var vegMask = ee.Image(0)
                            .where((arochFreq
@@ -199,6 +198,35 @@ for (var i_regiao=0;i_regiao<regioes.length; i_regiao++){
     image_in = image_in.where(vegMap.and(image_in.eq(22)), vegMap)
     Map.addLayer(image_in,vis1,'MapBio filtro anv e aroc')
   }
+  
+  // colocar aqui o filtro de afloramento rochoso (filtro 14 da col 8)
+  
+   //Passo 2 -> afloramento rochoso
+    if (aplicar.freq3){
+    var vegMask = ee.Image(0)
+                           .where((arochFreq)
+                           .gt(60),
+                           1)
+    /////Mapa base: 
+    var vegMap = ee.Image(0)
+                          .where(vegMask.eq(1),29)
+    vegMap = vegMap.updateMask(vegMap.neq(0))
+    image_in = image_in.where(vegMap, vegMap)
+    //***********************************************
+    // minoritatio para rochoso
+    vegMask = ee.Image(0)
+                           .where(arochFreq.lt(40),
+                           1)
+    /////Mapa base: 
+    vegMap = ee.Image(0)
+                          .where(vegMask.eq(1),mode)
+                           
+    vegMap = vegMap.updateMask(vegMap.neq(0))//.clip(BiomaPA)
+    image_in = image_in.where(vegMap.and(image_in.eq(29)), vegMap)
+    //*************************************************************
+    Map.addLayer(image_in,vis1,'aroc')
+    }
+  
   //**********************************************
   //******** Reras do filtro de frequencia 4
   //**********************************************
