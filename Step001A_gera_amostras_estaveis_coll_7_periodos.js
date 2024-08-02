@@ -1,6 +1,7 @@
-
-var out_collection = 8
-  
+ 
+var out_collection = 9
+ 
+// somente para visualizar  
 var biomas = ee.FeatureCollection('projects/mapbiomas-workspace/AUXILIAR/biomas_IBGE_250mil')
 var region = biomas.filterMetadata('Bioma','equals', 'Pampa')
 
@@ -10,11 +11,13 @@ var outline = blank.paint(region, 'AA0000', 2);
 var visPar = {'palette':'000000','opacity': 0.6};
 Map.addLayer(outline, visPar, 'bimoa250mil', false);
 
+// usado para MASK
 var biomes = ee.Image('projects/mapbiomas-workspace/AUXILIAR/biomas-raster-41')
 var biome = biomes.mask(biomes.eq(6))
 
 //var dirCol = 'projects/mapbiomas-workspace/public/collection6/mapbiomas_collection60_integration_v1';
-var dirCol = 'projects/mapbiomas-workspace/public/collection7_1/mapbiomas_collection71_integration_v1'
+//var dirCol = 'projects/mapbiomas-workspace/public/collection7_1/mapbiomas_collection71_integration_v1'
+var dirCol =  'projects/mapbiomas-workspace/public/collection8/mapbiomas_collection80_integration_v1'
 
 var colecao_In = ee.Image(dirCol).updateMask(biome)
 
@@ -22,35 +25,35 @@ print(colecao_In)
 var dirout = 'projects/mapbiomas-workspace/AMOSTRAS/col'+ out_collection + '/PAMPA/'
 var version_out = 'V01'
 
-//var freq_lim = 10, 
-//    anos = ['1985','1986','1987','1988','1989','1990','1991','1992','1993','1994'], 
-//    bandas_anos = ['classification_1985','classification_1986','classification_1987','classification_1988',
-//            'classification_1989','classification_1990','classification_1991',
-//            'classification_1992','classification_1993','classification_1994'], 
-//    sufix = '_85_94';
-var freq_lim = 10, 
-        anos = ['1995','1996','1997','1998','1999','2000','2001','2002','2003','2004'], 
-        bandas_anos = ['classification_1995','classification_1996','classification_1997','classification_1998',
-                'classification_1999','classification_2000','classification_2001','classification_2002',
-                'classification_2003','classification_2004'], 
-        sufix = '_95_04';
-//var freq_lim = 17,
-//            bandas_anos = ['classification_2005','classification_2006','classification_2007','classification_2008','classification_2009',
-//                           'classification_2010','classification_2011','classification_2012','classification_2013','classification_2014',
-//                           'classification_2015','classification_2016','classification_2017','classification_2018','classification_2019',
-//                           'classification_2020','classification_2021'],
-//            anos = ['2005','2006','2007','2008','2009',
-//                    '2010','2011','2012','2013','2014',
-//                    '2015','2016','2017','2018','2019',
-//                    '2020','2021'],               
-//        sufix = '_05_21';
-
-
-
+var freq_lim = 14, 
+    anos = ['1985','1986','1987','1988','1989','1990','1991',
+            '1992','1993','1994','1995','1996','1997','1998'], 
+    bandas_anos = ['classification_1985','classification_1986','classification_1987','classification_1988',
+                   'classification_1989','classification_1990','classification_1991','classification_1992',
+                   'classification_1993','classification_1994','classification_1995','classification_1996',
+                   'classification_1997','classification_1998'], 
+    sufix = '_85_98';
+//var freq_lim = 14, 
+//        anos = ['1999','2000','2001','2002','2003','2004','2005',
+//                '2006','2007','2008','2009','2010','2011','2012'], 
+//        bandas_anos = ['classification_1999','classification_2000','classification_2001','classification_2002',
+//                       'classification_2003','classification_2004','classification_2005','classification_2006',
+//                       'classification_2007','classification_2008','classification_2009','classification_2010',
+//                       'classification_2011','classification_2012'], 
+//        sufix = '_99_12';
+//var freq_lim = 10,
+//
+//            anos = ['2013','2014','2015','2016','2017','2018',
+//                    '2019','2020','2021','2022'],      
+//            bandas_anos = ['classification_2013','classification_2014','classification_2015','classification_2016',
+//                           'classification_2017','classification_2018','classification_2019','classification_2020',
+//                           'classification_2021','classification_2022'],
+//           sufix = '_13_22';
+//define ano de visualização
 var year = 2017
 var palettes = require('users/mapbiomas/modules:Palettes.js');
 //vis coll 05
-var vis = { 'bands':'classification_'+ String(year),'min': 0, 'max': 45,  'palette': palettes.get('classification5')};
+var vis = { 'bands':'classification_'+ String(year),'min': 0, 'max': 62,  'palette': palettes.get('classification8')};
 
 Map.addLayer(colecao_In, vis, 'Classes ORIGINAIS', true);
 print(colecao_In)
