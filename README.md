@@ -20,10 +20,9 @@ The process has been divided in 5 steps, this steps consist in:
 # List of scripts:
 # Prepare samples dataset to train Random Forest classifier.
 * ***Step001A_export_estable_regions_from_coll_8.js***: export stable area maps for al time series            
-* ***Step001B_gera_amostras_estaveis_coll_6_periodos.js***: export stable to four time intervals  
-* ***Step001C_merge_estaveis_5_labGeo.js***: use reference map to leiter stable area maps                
-* ***Step001D_exporta_pontos_estaveis.js***: apply à random selection on stable map to build the training dataset                
-* ***Step001E_exporta_amostras_treinamento_anual_col7.js***: export annual mosaic information tho the training dataset built in previous step.
+* ***Step001B_merge_stable_and_reference_samples.js***: use reference map to leiter stable area maps                
+* ***Step001C_export_stable_sample_points.js***: apply à random selection on stable map to build the training dataset                
+* ***Step001D_export_annual_training_sample.js***: export annual mosaic information tho the training dataset built in previous step.
 
 # Step 2 - Classification by region, the Pampa Biome has been divided in 7 regions
 Te following sprits runing the random forest classification to the 7 Pampa regions:
