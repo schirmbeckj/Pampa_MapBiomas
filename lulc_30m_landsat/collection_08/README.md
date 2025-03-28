@@ -16,4 +16,4 @@ The process has been divided in 5 steps, this steps consist in:
 * Step 2 - Classification by region, the Pampa Biome has been divided in 7 regions
 * Step 3 - Post classification process
 * Step 4 - Mosaic the pos classification images to obtain the biome map
-* Step 5 - export the biome map in different images, one image per year.
+* Step 5 - Export the biome map in different images, one image per year.
