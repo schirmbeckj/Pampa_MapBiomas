@@ -1,3 +1,9 @@
+<p align="center">
+<a href="https://github.com/schirmbeckj/Pampa_MapBiomas/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-LGPL_v3-green.svg" alt="License"></a>
+<a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a>
+<br>
+</p>
+
 <div class="fluid-row" id="header">
     <img src='./misc/logo_geokarten.png' height='90' width='auto' align='right'>
     <h1 class="title toc-ignore">MAPBIOMAS BRAZIL - PAMPA BIOME</h1>
